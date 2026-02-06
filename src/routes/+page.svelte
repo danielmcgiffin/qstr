@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { building } from "$app/environment";
   import { site } from "$lib/site";
+  import RotatingWords from "$lib/components/RotatingWords.svelte";
   const year = new Date().getFullYear();
 </script>
 
@@ -66,8 +66,24 @@
             ✦ {site.hero.kicker}
           </span>
 
-          <h1 class="mt-6 text-balance text-4xl font-semibold tracking-tight text-white md:text-6xl">
-            {site.hero.headline}
+          <h1 class="mt-6 text-balance text-4xl font-semibold tracking-tight text-white md:text-6xl leading-[1.05]">
+            <span class="grid w-full grid-cols-2 items-baseline">
+              <span class="justify-self-end text-white/80 pr-2 whitespace-nowrap">No more&nbsp</span>
+              <span class="justify-self-start whitespace-nowrap">
+                <RotatingWords
+                  words={[
+                    "dead docs",
+                    "\"ask Sarah\"",
+                    "dropped balls",
+                    "wiki sprawl",
+                    "tribal ops",
+                    "SOP graveyards",
+                    "document theater",
+                    "bad handoffs",
+                  ]}
+                />
+              </span>
+            </span>
           </h1>
 
           <p class="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-white/70 md:text-lg">
@@ -101,9 +117,9 @@
                   <!-- top bar -->
                   <div class="flex items-center gap-2 border-b border-white/10 px-4 py-3">
                     <div class="flex gap-1.5">
-                      <div class="h-2.5 w-2.5 rounded-full bg-white/20" />
-                      <div class="h-2.5 w-2.5 rounded-full bg-white/20" />
-                      <div class="h-2.5 w-2.5 rounded-full bg-white/20" />
+                      <div class="h-2.5 w-2.5 rounded-full bg-[rgb(var(--accent))]"></div>
+                      <div class="h-2.5 w-2.5 rounded-full bg-[rgb(var(--accent))]"></div>
+                      <div class="h-2.5 w-2.5 rounded-full bg-[rgb(var(--accent))]"></div>
                     </div>
                     <div class="ml-2 text-xs text-white/60">Demo</div>
                   </div>
