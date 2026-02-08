@@ -149,6 +149,15 @@ export const site = {
   },
 
   // ───────────────────────────────────────────
+  // IMPLEMENTATION CALLOUT
+  // ───────────────────────────────────────────
+  implementationCallout: {
+    headline: "Is the idea of setting up a new system giving you a headache already?",
+    text: "Most teams get their first bottleneck mapped in a single sitting. If you'd rather have us do it with you, we offer implementation sessions to get your atlas built and your team trained.",
+    cta: { label: "Book a call", href: "https://cal.com/danny-cursus/15min" },
+  },
+
+  // ───────────────────────────────────────────
   // FEATURES
   // ───────────────────────────────────────────
   features: {

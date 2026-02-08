@@ -256,6 +256,24 @@
       </div>
     </section>
 
+    <!-- Implementation callout banner -->
+    <div class="relative border-y border-[rgb(var(--border))] bg-[rgb(var(--bg-elev))]">
+      <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-5 sm:flex-row">
+        <div class="sm:text-left text-center">
+          <p class="text-sm font-semibold text-white">{site.implementationCallout.headline}</p>
+          <p class="mt-1 text-sm leading-relaxed text-[rgb(var(--muted))]">{site.implementationCallout.text}</p>
+        </div>
+        <a
+          class="shrink-0 rounded-xl border border-[rgb(var(--border))] bg-white/5 px-4 py-2 text-sm font-medium text-white/90 hover:bg-white/10"
+          href={site.implementationCallout.cta.href}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {site.implementationCallout.cta.label} →
+        </a>
+      </div>
+    </div>
+
     <!-- ═══════════════════════════════════════ -->
     <!-- PRICING                                 -->
     <!-- ═══════════════════════════════════════ -->
