@@ -22,7 +22,7 @@ export const methodContent: MethodContentSection[] = [
     slug: "diagnosis",
     title: "Why Most Ops Documentation Fails",
     summary:
-      "The patterns that kill every documentation effort — and why yours probably already has died.",
+      "The patterns that kill documentation efforts — and why yours probably already died.",
     intro:
       "You've seen this before. Maybe you built it yourself, maybe you inherited it. Either way, the result is the same: documentation that looked great on day one and became a liability (or got forgotten) by month three. We've found there are four primary failure modes. We've designed Quaestor to eliminate all of them.",
     groups: [
@@ -31,22 +31,22 @@ export const methodContent: MethodContentSection[] = [
           {
             id: "theater",
             title: "Documentation theater",
-            desc: "Long SOPs that look professional in the binder and are abandoned within a month. Everyone's built these. Nobody uses them. The effort goes into the writing, the screenshots, the layout... not the maintaining. And the business leaves the docs behind before the printer ink is dry.",
+            desc: "Long SOPs that look professional in the binder and are abandoned within a month. Everyone's built these. Nobody uses them. The effort goes into the writing, screenshots, and layout — not maintaining the system. The business leaves the docs behind before the ink is dry.",
           },
           {
             id: "duplicates",
             title: "Duplicate systems of record",
-            desc: "Copies of copies of copies. The same process described in a Google Doc, a wiki page, and an email thread (and none of them are current). Multiple versions of SOPs is the same as having no SOP. Instead of streamlining the work, we're slowing down to answer questions about what right looks like while the docs just add confusion.",
+            desc: "Copies of copies of copies. The same process described in a Google Doc, a wiki page, and an email thread — and none of them are current. Multiple versions of SOPs are the same as having no SOP at all. Instead of streamlining work, teams slow down to debate what \"right\" is.",
           },
           {
             id: "unowned",
             title: "Unowned actions, systems, or roles",
-            desc: "When writing SOPs, people often veer into using passive voice or stating that 'this will be done' without pinning the rose on a person or a role. These functions that exist on paper but have no clear owner become a drag as everyone is trying to decide whether the action is to them or not. Further, when something breaks, everyone points at someone else and it's very hard to get to the root cause. When something changes, nobody's owning the updates to the map. Accountability isn't optional in business, it's load-bearing.", 
+            desc: "When writing SOPs, people often use passive voice (\"this will be done\") without assigning ownership to a person or role. Steps that exist on paper but have no owner become operational drag. When something breaks, everyone points elsewhere. When something changes, no one updates the map. Accountability is load-bearing.",
           },
           {
             id: "graveyard",
             title: "The documentation graveyard",
-            desc: "Wikis nobody reads. SOPs layered on SOPs from reorgs in ages past. A SharePoint that answers questions nobody's asking anymore. The saddest part: someone, or many someones, spent real time and money building all of it. The why behing no one using could be one of any number of reasons, and in combination. But the fact that the investment was made and the rewards were not gained is painful.",
+            desc: "Wikis nobody reads. SOPs layered on SOPs from reorgs in ages past. A SharePoint full of answers to questions no one is asking. The saddest part: someone spent real time and money building all of it. Usage fails for many reasons, often in combination, but the result is the same — investment without return.",
           },
         ],
       },
@@ -75,12 +75,12 @@ export const methodContent: MethodContentSection[] = [
           {
             id: "source-of-truth",
             title: "The map is the source of truth",
-            desc: "In Quaestor, we've created a framework to organize your operations in a way that helps management see the big picture, and helps your team find exactly what they need at the point of need. It's not another copy of your docs. It's a live graph that connects your systems of record, your people, and your work. Quaestor doesn't replace your tools. It was built specifically as the connective tissue that brings together all the information you need to do your work in they way you actually work, not how you hope it works.",
+            desc: "Quaestor organizes operations so leadership can see the big picture and teams can retrieve what they need at the point of need. It's not another copy of your docs. It's a live graph connecting systems of record, people, and work. Quaestor doesn't replace your tools — it connects them so work can run the way it actually runs.",
           },
           {
             id: "outputs",
             title: "Atomic knowledge, dynamic outputs",
-            desc: "Something awesome happens when you're capturing knowledge once at the smallest useful level. It allows all these little pieces of knowledge to be assembled into whatever format you need. Instead of writing, saving, and maintaing things like onboarding guides, role manuals, or system desktop guides, you can generate them as needed and it will automatically pull from the latest information in your system. Docs on demand — assembled from the graph, not written by hand. Write it once, use it everywhere.",
+            desc: "When you capture knowledge once at the smallest useful level, those pieces can be assembled into whatever output you need. Instead of writing and maintaining onboarding guides, role manuals, and system docs by hand, generate them on demand from current graph data. Write once, use everywhere.",
           },
         ],
       },
@@ -187,7 +187,7 @@ export const methodContent: MethodContentSection[] = [
           {
             id: "handoff-delay",
             title: "Handoff delay",
-            desc: "Time between a request and the next owned action. Every hour of delay is a hour of lost momentum. Shorter is better. Zero is the goal.",
+            desc: "Time between a request and the next owned action. Every hour of delay is an hour of lost momentum. Shorter is better. Zero is the goal.",
           },
           {
             id: "vacation-test",

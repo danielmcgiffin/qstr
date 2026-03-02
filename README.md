@@ -39,4 +39,34 @@ npm run build
 
 You can preview the production build with `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Deploying to Cloudflare Pages
+
+This project builds as a static site (`build/`) and is ready for Cloudflare Pages.
+
+```sh
+# 1) authenticate once
+npm run cf:whoami
+# if unauthenticated:
+npx wrangler login
+
+# 2) deploy preview
+npm run cf:pages:deploy
+
+# 3) deploy production (main branch)
+npm run cf:pages:deploy:prod
+```
+
+`wrangler.toml` is configured with:
+- project name: `qstr-mrktng`
+- output dir: `build`
+
+## Fastest temporary share link (no Pages setup)
+
+For quick teammate demos, you can expose local dev with a temporary Cloudflare tunnel:
+
+```sh
+npm run dev
+cloudflared tunnel --url http://127.0.0.1:5173
+```
+
+This gives a temporary `trycloudflare.com` URL.

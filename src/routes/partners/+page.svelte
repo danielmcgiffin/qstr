@@ -1,5 +1,14 @@
 <script lang="ts">
+  import { trackEvent } from "$lib/analytics";
   import { site } from "$lib/site";
+
+  const trackBookingClick = (location: string) => {
+    trackEvent("booking_click", { location });
+  };
+
+  const trackDemoClick = (location: string) => {
+    trackEvent("demo_click", { location });
+  };
 </script>
 
 <svelte:head>
@@ -13,7 +22,7 @@
 <div class="min-h-screen overflow-x-hidden bg-[rgb(var(--bg))] text-[rgb(var(--text))]">
   <div class="relative">
     <!-- Background -->
-    <div aria-hidden class="pointer-events-none absolute inset-0 overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
       <div class="absolute left-1/2 top-[-35%] h-[820px] w-[820px] -translate-x-1/2 rounded-full bg-white/5 blur-3xl"></div>
       <div class="absolute right-[8%] top-[28%] h-[360px] w-[360px] rounded-full bg-white/5 blur-3xl"></div>
       <div class="absolute left-[-8%] top-[18%] h-[480px] w-[480px] rounded-full bg-white/[0.03] blur-3xl"></div>
@@ -57,12 +66,14 @@
               href="https://cal.com/danny-cursus/15min"
               target="_blank"
               rel="noreferrer"
+              onclick={() => trackBookingClick("partners_hero")}
             >
               Book a 15-min call →
             </a>
             <a
               class="w-full min-w-[170px] rounded-xl border border-[rgb(var(--border))] bg-white/5 px-4 py-2 text-center text-sm font-medium text-white/90 hover:bg-white/10 sm:w-auto"
               href="https://qstr.cursus.tools/demo/process"
+              onclick={() => trackDemoClick("partners_hero")}
             >
               See the product →
             </a>
@@ -137,7 +148,7 @@
             What changes with Quaestor
           </h2>
           <p class="mt-4 text-pretty text-[rgb(var(--muted))]">
-            Your method and expertice becomes their infrastructure:
+            Your method and expertise become client infrastructure:
             repeatable, maintainable, and actionable.
           </p>
         </div>
@@ -261,12 +272,14 @@
               href="https://cal.com/danny-cursus/15min"
               target="_blank"
               rel="noreferrer"
+              onclick={() => trackBookingClick("partners_cta")}
             >
               Book a 15-min call →
             </a>
             <a
               class="w-full min-w-[170px] rounded-xl border border-[rgb(var(--border))] bg-white/5 px-4 py-2 text-center text-sm font-medium text-white/90 hover:bg-white/10 sm:w-auto"
               href="https://qstr.cursus.tools/demo/process"
+              onclick={() => trackDemoClick("partners_cta")}
             >
               See the product →
             </a>
