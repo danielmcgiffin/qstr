@@ -4,19 +4,21 @@
 
   let { children } = $props();
 
-  const pathname = $derived(() => $page.url.pathname);
-  const activeIndex = $derived(() =>
-    methodSections.findIndex((section) => pathname === methodPath(section.slug))
+  const pathname = $derived($page.url.pathname);
+  const activeIndex = $derived(
+    methodSections.findIndex((section) => pathname === methodPath(section.slug)),
   );
-  const isOverview = $derived(() => pathname === "/method" || pathname === "/method/");
+  const isOverview = $derived(pathname === "/method" || pathname === "/method/");
 
   let mobileNavOpen = $state(false);
 
-  const currentLabel = $derived(() => {
-    if (isOverview) return "Overview";
-    if (activeIndex >= 0) return `${activeIndex + 1}. ${methodSections[activeIndex].title}`;
-    return "Navigate";
-  });
+  const currentLabel = $derived(
+    isOverview
+      ? "Overview"
+      : activeIndex >= 0
+        ? `${activeIndex + 1}. ${methodSections[activeIndex].title}`
+        : "Navigate",
+  );
 </script>
 
 <div class="min-h-screen bg-[rgb(var(--bg))] text-[rgb(var(--text))]">

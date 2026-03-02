@@ -4,9 +4,12 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "node scripts/dev-safe.mjs",
 		"build": "vite build",
 		"preview": "vite preview",
+		"cf:whoami": "npx -y wrangler whoami",
+		"cf:pages:deploy": "npm run build && npx -y wrangler pages deploy build --project-name qstr-mrktng",
+		"cf:pages:deploy:prod": "npm run build && npx -y wrangler pages deploy build --project-name qstr-mrktng --branch main",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",

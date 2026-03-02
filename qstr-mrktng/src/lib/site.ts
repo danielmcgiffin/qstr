@@ -4,6 +4,7 @@ export type CTA = { label: string; href: string };
 export type FeatureItem = { title: string; desc: string; icon: string };
 export type StepItem = { n: string; title: string; desc: string };
 export type FaqItem = { q: string; a: string };
+export type DetailItem = { title: string; desc: string };
 
 export type PricingPlan = {
   name: string;
@@ -42,7 +43,7 @@ export const site = {
       "Quaestor maps who does what, in which system, as a connected graph — so your team finds answers instead of asking you.",
     primaryCta: {
       label: "See it in action",
-      href: "https://qstr.cursus.tools",
+      href: "https://qstr.cursus.tools/login?utm_source=cursus.tools&utm_medium=website&utm_campaign=v1_launch&utm_content=hero",
     },
     secondaryCta: { label: "Read the method", href: "/method" },
   } satisfies {
@@ -57,8 +58,8 @@ export const site = {
   // DEMO
   // ───────────────────────────────────────────
   demo: {
-    gifSrc: "/role-details.png",
-    posterSrc: "/demo-poster.jpg",
+    gifSrc: "/demo-screenshot.png",
+    posterSrc: "/demo-screenshot.png",
     alt: "Quaestor showing connected processes, roles, and systems.",
   },
 
@@ -83,6 +84,35 @@ export const site = {
     headline: string;
     bullets: string[];
     punchline: string;
+  },
+
+  // ───────────────────────────────────────────
+  // SHADOW OPS
+  // ───────────────────────────────────────────
+  shadowOps: {
+    eyebrow: "Shadow Ops",
+    headline: "The hidden operating system inside your business",
+    subhead:
+      "Shadow Ops is the load-bearing knowledge trapped in founders, long-tenure team members, and old message threads. It works right up until someone is out sick, quits, or gets overloaded.",
+    points: [
+      {
+        title: "Human API",
+        desc: "If one person has to answer every edge-case question, they are the API. That's not scale. That's operational debt.",
+      },
+      {
+        title: "Coordination tax",
+        desc: "Every undocumented handoff adds delays, follow-up messages, and rework. The tax compounds every week.",
+      },
+      {
+        title: "Documentation graveyards",
+        desc: "Dead SOPs are a symptom. The root cause is missing relationships between roles, processes, and systems.",
+      },
+    ],
+  } satisfies {
+    eyebrow: string;
+    headline: string;
+    subhead: string;
+    points: DetailItem[];
   },
 
   // ───────────────────────────────────────────
@@ -205,6 +235,35 @@ export const site = {
   },
 
   // ───────────────────────────────────────────
+  // PROOF
+  // ───────────────────────────────────────────
+  proof: {
+    eyebrow: "Proof in the product",
+    headline: "What buyers see in the first 15 minutes",
+    subhead:
+      "The demo is built around one bottleneck workflow so prospects can see immediate contrast with static docs.",
+    items: [
+      {
+        title: "Gaps and contradictions surface fast",
+        desc: "When roles, actions, and systems are linked, missing ownership and broken handoffs show up immediately.",
+      },
+      {
+        title: "Role portal answers real questions",
+        desc: "Click into Ops Manager and see every connected process and system in one place — no scavenger hunt.",
+      },
+      {
+        title: "Dynamic onboarding output",
+        desc: "Generate an Operations Manager guide from atomic knowledge in the graph, on demand.",
+      },
+    ],
+  } satisfies {
+    eyebrow: string;
+    headline: string;
+    subhead: string;
+    items: DetailItem[];
+  },
+
+  // ───────────────────────────────────────────
   // PRICING
   // ───────────────────────────────────────────
   pricing: {
@@ -217,50 +276,41 @@ export const site = {
         badge: "Great for getting started",
         price: "$49",
         desc: "For small teams getting their ops out of heads and into links.",
-        perks: [
-          "Up to 10 employees",
-          "Maintenance alerts",
-          "Email support",
-        ],
-        cta: { label: "Get started", href: "https://qstr.cursus.tools" },
+        perks: ["Up to 10 employees", "Maintenance alerts", "Email support"],
+        cta: {
+          label: "Get started",
+          href: "https://qstr.cursus.tools/login?utm_source=cursus.tools&utm_medium=website&utm_campaign=v1_launch&utm_content=pricing_starter",
+        },
         featured: false,
       },
       {
         name: "Growth",
         price: "$99",
         desc: "For teams starting to feel the coordination tax.",
-        perks: [
-          "10–25 employees",
-          "Unlimited viewers",
-          "Unlimited editors",
-          "Priority support",
-        ],
-        cta: { label: "Start Growth", href: "https://qstr.cursus.tools" },
+        perks: ["10–25 employees", "Unlimited viewers", "Unlimited editors", "Priority support"],
+        cta: {
+          label: "Start Growth",
+          href: "https://qstr.cursus.tools/login?utm_source=cursus.tools&utm_medium=website&utm_campaign=v1_launch&utm_content=pricing_growth",
+        },
         featured: true,
       },
       {
         name: "Scale",
         price: "$299",
         desc: "For multi-team workflows and real cross-department handoffs.",
-        perks: [
-          "26–100 employees",
-          "Unlimited editors",
-          "Advanced alerts",
-          "Implementation guidance",
-        ],
+        perks: ["26–100 employees", "Unlimited editors", "Advanced alerts", "Implementation guidance"],
         badge: "Most popular",
-        cta: { label: "Start Scale", href: "https://qstr.cursus.tools" },
+        cta: {
+          label: "Start Scale",
+          href: "https://qstr.cursus.tools/login?utm_source=cursus.tools&utm_medium=website&utm_campaign=v1_launch&utm_content=pricing_scale",
+        },
         featured: false,
       },
       {
         name: "Enterprise",
         price: "Custom",
-        desc: "For larger companies, or teams withing larger companies, reach out and let's find a price that makes sense.",
-        perks: [
-          "Custom-configured workspaces",
-          "Dedicated onboarding",
-          "Priority support",
-        ],
+        desc: "For larger companies, or teams within larger companies, reach out and let's find a price that makes sense.",
+        perks: ["Custom-configured workspaces", "Dedicated onboarding", "Priority support"],
         cta: {
           label: "Talk to us",
           href: "https://cal.com/danny-cursus/15min",
@@ -268,6 +318,11 @@ export const site = {
         featured: false,
       },
     ],
+  } satisfies {
+    eyebrow: string;
+    headline: string;
+    subhead: string;
+    plans: PricingPlan[];
   },
 
   // ───────────────────────────────────────────

@@ -1,16 +1,46 @@
 <script lang="ts">
-  import { site } from "$lib/site";
+  import { BellRing, Palmtree, RefreshCw, Rocket, TrendingUp, Users } from "lucide-svelte";
+  import { page } from "$app/stores";
   import RotatingWords from "$lib/components/RotatingWords.svelte";
-  import { Rocket, RefreshCw, Palmtree, BellRing, Users, TrendingUp } from "lucide-svelte";
+  import { trackEvent } from "$lib/analytics";
+  import { site } from "$lib/site";
+
   const year = new Date().getFullYear();
 
   const iconMap: Record<string, typeof Rocket> = {
-    'rocket': Rocket,
-    'refresh-cw': RefreshCw,
-    'palmtree': Palmtree,
-    'bell-ring': BellRing,
-    'users': Users,
-    'trending-up': TrendingUp,
+    rocket: Rocket,
+    "refresh-cw": RefreshCw,
+    palmtree: Palmtree,
+    "bell-ring": BellRing,
+    users: Users,
+    "trending-up": TrendingUp,
+  };
+
+  const demoImageSrc = $derived.by(() => {
+    const source = site.demo.gifSrc;
+    if (!source.startsWith("/")) {
+      return source;
+    }
+
+    const match = $page.url.pathname.match(/^\/proxy\/\d+/);
+    return match ? `${match[0]}${source}` : source;
+  });
+
+  const trackHeroPrimaryCta = () => {
+    trackEvent("hero_cta_click", { location: "home_hero_primary" });
+    trackEvent("signup_start", { location: "home_hero_primary" });
+  };
+
+  const trackBookingClick = (location: string) => {
+    trackEvent("booking_click", { location });
+  };
+
+  const trackDemoClick = (location: string) => {
+    trackEvent("demo_click", { location });
+  };
+
+  const trackSignupStart = (location: string) => {
+    trackEvent("signup_start", { location });
   };
 </script>
 
@@ -25,7 +55,7 @@
 <div class="min-h-screen overflow-x-hidden bg-[rgb(var(--bg))] text-[rgb(var(--text))]">
   <div class="relative">
     <!-- Background -->
-    <div aria-hidden class="pointer-events-none absolute inset-0 overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
       <div class="absolute left-1/2 top-[-35%] h-[820px] w-[820px] -translate-x-1/2 rounded-full bg-white/5 blur-3xl"></div>
       <div class="absolute right-[8%] top-[28%] h-[360px] w-[360px] rounded-full bg-white/5 blur-3xl"></div>
       <div class="absolute left-[-8%] top-[18%] h-[480px] w-[480px] rounded-full bg-white/[0.03] blur-3xl"></div>
@@ -79,6 +109,7 @@
             <a
               class="w-full min-w-[170px] rounded-xl bg-[rgb(var(--accent))] px-4 py-2 text-center text-sm font-medium text-white shadow-[0_0_0_1px_rgba(255,255,255,0.12)] hover:brightness-110 sm:w-auto"
               href={site.hero.primaryCta.href}
+              onclick={trackHeroPrimaryCta}
             >
               {site.hero.primaryCta.label} →
             </a>
@@ -114,10 +145,10 @@
               </div>
               <div class="ml-2 text-xs text-[rgb(var(--muted))]">Demo</div>
             </div>
-            <img src={site.demo.gifSrc} alt={site.demo.alt} class="block w-full" loading="lazy" />
+            <img src={demoImageSrc} alt={site.demo.alt} class="block w-full" loading="lazy" />
           </div>
         </div>
-        <div class="pointer-events-none absolute -inset-x-8 -inset-y-10 -z-10 bg-gradient-to-r from-white/0 via-white/10 to-white/0 blur-3xl" />
+        <div class="pointer-events-none absolute -inset-x-8 -inset-y-10 -z-10 bg-gradient-to-r from-white/0 via-white/10 to-white/0 blur-3xl"></div>
       </div>
     </div>
 
@@ -152,6 +183,34 @@
     </section>
 
     <!-- ═══════════════════════════════════════ -->
+    <!-- SHADOW OPS                              -->
+    <!-- ═══════════════════════════════════════ -->
+    <section id="shadow-ops" class="relative py-20 md:py-28">
+      <div class="mx-auto w-full max-w-6xl px-6">
+        <div class="mx-auto max-w-3xl text-center">
+          <span
+            class="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-[rgb(var(--border))] bg-white/5 px-3 py-1 text-xs text-white/80"
+          >
+            {site.shadowOps.eyebrow}
+          </span>
+          <h2 class="mt-5 text-balance text-3xl font-semibold tracking-tight md:text-4xl">
+            {site.shadowOps.headline}
+          </h2>
+          <p class="mx-auto mt-4 max-w-3xl text-pretty text-[rgb(var(--muted))]">{site.shadowOps.subhead}</p>
+        </div>
+
+        <div class="mt-10 grid gap-4 md:grid-cols-3">
+          {#each site.shadowOps.points as point}
+            <div class="rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--bg-elev))] p-6">
+              <h3 class="text-base font-semibold text-white">{point.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-[rgb(var(--muted))]">{point.desc}</p>
+            </div>
+          {/each}
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════ -->
     <!-- FEATURES                                -->
     <!-- ═══════════════════════════════════════ -->
     <section id="features" class="relative py-20 md:py-28">
@@ -168,9 +227,10 @@
 
         <div class="mt-10 grid gap-4 md:grid-cols-3">
           {#each site.features.items as f}
+            {@const Icon = iconMap[f.icon]}
             <div class="rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--bg-elev))] p-6">
               <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-lg border border-[rgb(var(--border))] bg-white/5">
-                <svelte:component this={iconMap[f.icon]} size={18} class="text-[rgb(var(--muted))]" />
+                <Icon size={18} class="text-[rgb(var(--muted))]" />
               </div>
               <div class="text-base font-semibold">{f.title}</div>
               <p class="mt-3 text-sm leading-relaxed text-[rgb(var(--muted))]">{f.desc}</p>
@@ -268,11 +328,50 @@
           href={site.implementationCallout.cta.href}
           target="_blank"
           rel="noreferrer"
+          onclick={() => trackBookingClick("home_implementation_callout")}
         >
           {site.implementationCallout.cta.label} →
         </a>
       </div>
     </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- PROOF                                   -->
+    <!-- ═══════════════════════════════════════ -->
+    <section id="proof" class="relative py-20 md:py-24">
+      <div class="mx-auto w-full max-w-6xl px-6">
+        <div class="mx-auto max-w-3xl text-center">
+          <span
+            class="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-[rgb(var(--border))] bg-white/5 px-3 py-1 text-xs text-white/80"
+          >
+            {site.proof.eyebrow}
+          </span>
+          <h2 class="mt-5 text-balance text-3xl font-semibold tracking-tight md:text-4xl">
+            {site.proof.headline}
+          </h2>
+          <p class="mt-4 text-pretty text-[rgb(var(--muted))]">{site.proof.subhead}</p>
+        </div>
+
+        <div class="mt-10 grid gap-4 md:grid-cols-3">
+          {#each site.proof.items as item}
+            <div class="rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--bg-elev))] p-6">
+              <h3 class="text-base font-semibold text-white">{item.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-[rgb(var(--muted))]">{item.desc}</p>
+            </div>
+          {/each}
+        </div>
+
+        <div class="mt-8 text-center">
+          <a
+            class="inline-flex min-w-[170px] items-center justify-center rounded-xl border border-[rgb(var(--border))] bg-white/5 px-4 py-2 text-sm font-medium text-white/90 hover:bg-white/10"
+            href="https://qstr.cursus.tools/demo/process"
+            onclick={() => trackDemoClick("home_proof_demo")}
+          >
+            Watch the demo flow →
+          </a>
+        </div>
+      </div>
+    </section>
 
     <!-- ═══════════════════════════════════════ -->
     <!-- PRICING                                 -->
@@ -328,6 +427,10 @@
                 <a
                   class="block w-full rounded-xl bg-[rgb(var(--accent))] px-4 py-2 text-center text-sm font-medium text-white shadow-[0_0_0_1px_rgba(255,255,255,0.12)] hover:brightness-110"
                   href={t.cta.href}
+                  onclick={() =>
+                    t.cta.href.includes("cal.com")
+                      ? trackBookingClick(`home_pricing_${t.name.toLowerCase()}`)
+                      : trackSignupStart(`home_pricing_${t.name.toLowerCase()}`)}
                 >
                   {t.cta.label}
                 </a>
@@ -370,7 +473,8 @@
           <div class="grid gap-3 sm:grid-cols-2">
             <a
               class="flex flex-col items-center rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--bg-elev))] p-6 text-center transition hover:border-[rgb(var(--border-strong))]"
-              href="https://qstr.cursus.tools"
+              href="https://qstr.cursus.tools/login?utm_source=cursus.tools&utm_medium=website&utm_campaign=v1_launch&utm_content=faq_map_ops"
+              onclick={() => trackSignupStart("home_faq_map_ops")}
             >
               <span class="text-sm font-semibold text-white">Map your operations</span>
               <span class="mt-1 text-xs text-[rgb(var(--muted))]">For founders and teams</span>
