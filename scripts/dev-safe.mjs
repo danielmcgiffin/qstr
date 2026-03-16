@@ -32,7 +32,8 @@ const readPortFromArgs = (args) => {
 	return null;
 };
 
-const port = readPortFromArgs(cliArgs) ?? Number.parseInt(process.env.PORT ?? `${DEFAULT_PORT}`, 10);
+const port =
+	readPortFromArgs(cliArgs) ?? Number.parseInt(process.env.PORT ?? `${DEFAULT_PORT}`, 10);
 
 const listListeners = () => {
 	const result = spawnSync('ss', ['-ltnpH'], { encoding: 'utf8' });
@@ -49,7 +50,7 @@ const parsePid = (line) => {
 const commandForPid = (pid) => {
 	const path = `/proc/${pid}/cmdline`;
 	if (!existsSync(path)) return '';
-	return readFileSync(path, 'utf8').replace(/\u0000/g, ' ').trim();
+	return readFileSync(path, 'utf8').split('\u0000').join(' ').trim();
 };
 
 const waitForExit = async (pid, timeoutMs = 2000) => {

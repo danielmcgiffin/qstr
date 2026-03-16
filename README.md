@@ -1,85 +1,104 @@
-# sv
+# qstr-mrktng
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Quaestor marketing site (SvelteKit 5 + Tailwind CSS 4), deployed as a static build to Cloudflare Pages.
 
-## Creating a project
+This repo is set up to be worked on by a human owner plus an AI coding agent.
 
-If you're seeing this, you've probably already done this step. Congrats!
+See also: [`CLAUDE.md`](./CLAUDE.md)
 
-```sh
-# create a new project
-npx sv create my-app
-```
+## 1) Quick start
 
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" --install npm qstr-mrktng
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
+npm ci
+cp .env.example .env
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Default dev URL: `http://127.0.0.1:5173`
 
-To create a production version of your app:
+The dev command uses `scripts/dev-safe.mjs` to auto-clear stale local Vite processes for this project.
 
-```sh
+## 2) Required quality gate (before PR/merge)
+
+Run all three:
+
+```bash
+npm run check
+npm run lint
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+If lint fails only due formatting, run:
 
-## Deploying to Cloudflare Pages
-
-This project builds as a static site (`build/`) and is ready for Cloudflare Pages.
-
-```sh
-# 1) authenticate once
-npm run cf:whoami
-# if unauthenticated:
-npx wrangler login
-
-# 2) deploy preview
-npm run cf:pages:deploy
-
-# 3) deploy production (main branch)
-npm run cf:pages:deploy:prod
+```bash
+npm run format
+npm run lint
 ```
 
-`wrangler.toml` is configured with:
-- project name: `qstr-mrktng`
-- output dir: `build`
+## 3) Project map
 
-## GitHub Actions auto-deploy (recommended)
+### High-signal content files
 
-Workflow file:
+- `src/lib/site.ts` — main marketing copy, nav, CTA links, pricing, FAQ, section content.
+- `src/lib/method-content.ts` — long-form method chapter content.
+- `src/lib/method.ts` — method index and slug helpers.
+
+### Routes
+
+- `src/routes/+page.svelte` — homepage.
+- `src/routes/method/+page.svelte` — method landing page.
+- `src/routes/method/[slug]/+page.svelte` + `+page.ts` — chapter pages.
+- `src/routes/partners/+page.svelte` — partner page + intake flow.
+- `src/routes/contact/+page.svelte` — contact page.
+- `src/routes/+layout.svelte` — global header/nav + analytics scripts + favicon/logo proxy handling.
+
+### Shared utilities
+
+- `src/lib/analytics.ts` — event tracking helper used by CTA interactions.
+- `static/` — image/video assets used by pages.
+
+## 4) Environment variables
+
+Copy from `.env.example` and fill only what you need.
+
+Public runtime vars (safe for browser exposure):
+
+- `PUBLIC_PLAUSIBLE_DOMAIN` (optional, defaults to `cursus.tools`)
+- `PUBLIC_PARTNER_INTAKE_ENDPOINT` (optional; if empty, partner intake falls back to `mailto:`)
+- `PUBLIC_PARTNER_INTAKE_EMAIL` (optional fallback email)
+
+Local deploy vars (secret; never commit values):
+
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+
+## 5) Deployment
+
+### Local CLI deploy
+
+```bash
+npm run cf:whoami
+npm run cf:pages:deploy        # preview branch deploy
+npm run cf:pages:deploy:prod   # production (main branch target)
+```
+
+`wrangler.toml` is configured for project `qstr-mrktng` with output dir `build`.
+
+### GitHub Actions deploy
+
+This repo includes a standalone workflow at:
+
+- `.github/workflows/cloudflare-pages.yml`
+
+It runs `check`, `lint`, and `build`, then deploys to Cloudflare Pages.
+
+If you're still running inside the parent monorepo (`/srv/dev/qstr`), there is also a monorepo-scoped workflow at:
+
 - `/srv/dev/qstr/.github/workflows/cloudflare-pages-qstr-mrktng.yml`
 
-Set these GitHub repository secrets:
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID` (`038f386f26a1a9bef9eb2d50e7f8c218`)
+## 6) Handoff checklist (recommended)
 
-Behavior:
-- push to `master`/`main` with changes under `qstr-mrktng/**` → deploys production to `qstr-mrktng.pages.dev`
-- pull request touching `qstr-mrktng/**` → deploys preview and comments URL on the PR
-
-## Fastest temporary share link (no Pages setup)
-
-For quick teammate demos, you can expose local dev with a temporary Cloudflare tunnel:
-
-```sh
-npm run dev
-cloudflared tunnel --url http://127.0.0.1:5173
-```
-
-This gives a temporary `trycloudflare.com` URL.
+- [ ] Rotate any previously shared/exposed Cloudflare tokens.
+- [ ] Confirm GitHub repo secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
+- [ ] Ensure agent reads `CLAUDE.md` before first task.
+- [ ] Start from `STARTER_BACKLOG.md` for first PRs.

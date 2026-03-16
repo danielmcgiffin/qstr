@@ -1,0 +1,117 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+concurrency:
+  group: cloudflare-pages-qstr-mrktng-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Set Cloudflare branch target
+        id: cf-branch
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "name=pr-${{ github.event.pull_request.number }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=main" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        run: |
+          set -euo pipefail
+
+          DEPLOY_OUTPUT=$(npx -y wrangler pages deploy build \
+            --project-name qstr-mrktng \
+            --branch "${{ steps.cf-branch.outputs.name }}" \
+            --commit-hash "${GITHUB_SHA}" 2>&1)
+
+          echo "$DEPLOY_OUTPUT"
+
+          DEPLOYMENT_URL=$(echo "$DEPLOY_OUTPUT" | grep -Eo 'https://[[:alnum:]-]+\.qstr-mrktng\.pages\.dev' | tail -n1 || true)
+          if [ -z "$DEPLOYMENT_URL" ]; then
+            DEPLOYMENT_URL="https://qstr-mrktng.pages.dev"
+          fi
+
+          echo "deployment_url=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Report deployment URL
+        run: echo "Deployed to ${{ steps.deploy.outputs.deployment_url }}"
+
+      - name: Comment preview URL on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment_url }}
+        with:
+          script: |
+            const marker = '<!-- qstr-mrktng-cf-pages-preview -->';
+            const body = `${marker}\n🚀 Cloudflare Pages preview: ${process.env.DEPLOYMENT_URL}`;
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100,
+            });
+
+            const existing = comments.find((comment) =>
+              comment.user?.type === 'Bot' && comment.body?.includes(marker),
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body,
+              });
+            }
